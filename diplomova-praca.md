@@ -164,7 +164,7 @@ Ako referenčný dizajn pre testovanie postupov, rôzne merania a analýzu som p
 
 Šablóna obsahuje spolu 6 CSS súborov. Súbory *bootstrap.min.css*, *font-awesome.min.css*, *font-awesome-ie7.min.css* neobsahujú žiadne obrázky, takže nie sú relevantné pre spracovanie. Súbor *flexslider.css* obsahuje iba jediný obrázok, takže *sprite* taktiež nemá zmyseľ.
 
-V súbore `style.css` sa nachádza definícia vzhľadu samotnej šablóny.
+V súbore `styles.css` sa nachádza definícia vzhľadu samotnej šablóny.
 
 Obsahuje 17 obrázkov s nasledujúcimi definíciami:
 
