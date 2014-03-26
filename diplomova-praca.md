@@ -116,15 +116,13 @@ Z dôvodu nepodporovania animácie pri PNG súboroch[^standard-exportu], nemôž
 
 [^standard-exportu]: Formát PNG je štandardne používaný ako výstupný formát *sprite* obrázka.
 
-## Konkurenčné riešenie Data URL
+## Konkurenčné riešenie Data URI
 
 Pre úplnosť je vhodné spomenúť techniku urýchlenia webu pomocou Data URL[^specifikacia-data-url]. Pri tejto technike je v CSS odkaz na súbor (obrázok) nahradený za hlavičku a textovú reprezentáciu obrázka kódovaním base64. Hlavnou nevýhodou je zväčšenie prenášaného množstva dát o 33% oproti originálu.
 
 Možným obmedzením je problematická podpora pseudoprotokolu `data` v Internet Exploreri 8 a starších. IE 8 podporuje *Data URL* s maximálnou veľkosťou 32 kB a staršie nepodporujú túto funkciu vôbec.
 
 [^specifikacia-data-url]: http://tools.ietf.org/html/rfc2397
-
-\newpage
 
 : Porovnanie štandardného volania obrázkov, Data URI a CSS Sprite
 
@@ -156,7 +154,7 @@ je cesta k súboru v CSS nahradená za textovú reprezentáciu obrázka a štýl
 
 # Referenčný dizajn
 
-Ako referenčný dizajn pre testovanie postupov, rôzne merania a analýzu som pri práci zvolil open source šablónu pre CMS Joomla s názvom Eclipse[^eclipse]. Šablóna bol vybratá náhodne. Podmienkou výberu bol moderný dizajn a otvorený zdrojový kód pre licenčne bezprobĺémové použitie v práci. Šablónu je možné stiahnuť z webstránky [joomlatemplates.me](http://joomlatemplates.me/wp-content/plugins/download-monitor/download.php?id=14).
+Ako referenčný dizajn pre testovanie postupov, rôzne merania a analýzu som pri práci zvolil open source šablónu pre CMS Joomla s názvom Eclipse[^eclipse]. Šablóna bola vybratá náhodne. Podmienkou výberu bol moderný dizajn a otvorený zdrojový kód pre licenčne bezprobĺémové použitie v práci. Šablónu je možné stiahnuť z webstránky [joomlatemplates.me](http://joomlatemplates.me/wp-content/plugins/download-monitor/download.php?id=14).
 
 [^eclipse]: http://joomlathemes.co/demo3x/eclipse
 
@@ -188,25 +186,61 @@ more.png                     horizontálne               1,4 kB          1 x 36 
 sidebar-li2.png                  nie                    1,5 kB          7 x 7 px             49 px^2^
 sidebar-li1.png                  nie                    1,5 kB          7 x 7 px             49 px^2^
 arrow_up.png                     nie                    1,3 kB         50 x 50 px          2 500 px^2^
-error.png                        áno                    1,9 kB         32 x 32 px          1 024 px^2^
+error.png                        áno                    1,9 kB        560 x 72 px          1 024 px^2^
 **SPOLU**                                            **62,9 kB**                        **631 898 px^2^**
 
 : Detailný rozbor obrázkov
 
 # Manuálne vytvorenie CSS Spritu
 
+## Spracovanie obrazových podkladov
+
 V programe Gimp[^gimp] som čo najoptimálnejšie manuálne vyskladal obrázky. Výsledkom sú dva obrazce.
 
 [^gimp]: http://www.gimp.org
 
-Prvý *sprite* s názvom *sprite-horizontal.png* obsahuje súbory *bg.png* a *more.png* pod sebou. Súbor *bg.png* mal pôvodne šírku 50 px. Vzhľadom na nutnosť rovnakej šírky všetkých použitých horizontálnych obrázkov som manuálne zúžil obrázok na 1 px. Bolo to možné, pretože súbor obsahuje iba prechod a nie zložitejšiu vzorku.
+Prvý *sprite* s názvom *manual-sprite-horizontal.png* obsahuje súbory *bg.png* a *more.png* pod sebou. Súbor *bg.png* mal pôvodne šírku 50 px. Vzhľadom na nutnosť rovnakej šírky všetkých použitých horizontálnych obrázkov som manuálne zúžil obrázok na 1 px. Bolo to možné, pretože súbor obsahuje iba prechod a nie zložitejšiu vzorku.
 
-Druhý zostavený súbor, *sprite.png*, obsahuje zvyšných 12 použiteľných obrázkov.
+Druhý zostavený súbor, *manual-sprite.png*, obsahuje zvyšných 12 použiteľných obrázkov. Najprv som do ľavého horného rohu umiestnil najväčší obrázok *header.png*. Pod ten som vložil druhý najväčší - *error.png*. Následne vedla neho vpravo som vyskladal vedla seba zvyšné použiteľné obrázky.
+
+![manual-sprite.png](images/manual-sprite.png)
+
+Názov súboru                      Veľkosť      Dátová úspora[^datova-uspora]         Rozmer         Využitosť plochy[^vyuzitost-plochy]
+------------------------------  -----------  ---------------------------------  ----------------  ---------------------------------------
+manual-sprite-horizontal.png      590,0 B                  34,6 x                 1 x 636 px                     924,6 x
+manual-sprite.png                 29,0 kB                  1,46 x                 980 x 672 px                    91,0 x
+
+: Porovnanie *spritov* a pôvodných obrázkov.
+
+[^datova-uspora]: Pomer súčtu veľkosti jednotlivých čiastkových obrázkov s výsledným obrázkom.
+[^vyuzitost-plochy]: Pomer súčtu plôch jednotlivých čiastkových obrázkov s výsledným obrázkom.
+
+Zoznam súborov      Súradnice
+----------------  -------------
+bg.png                 0,0
+more.png               0,600
+
+: Zoznam obrázkov v *manual-sprite-horizontal.png*
 
 
+Zoznam súborov      Súradnice
+----------------  -------------
+header.png             0,0  
+dribbble.png         560,600
+facebook.png         592,600
+flickr.png           624,600
+google.png           656,600
+linkedin.png         688,600
+picasa.png           720,600
+pinterest.png        752,600
+reddit.png           784,600
+twitter.png          816,600
+youtube.png          848,600
+error.png              0,600
 
-29 kB
-42,2 raw po jednom
+: Zoznam obrázkov v *manual-sprite.png*
+
+## Úprava CSS súboru
 
 ## Výpočet užitočnosti
 
