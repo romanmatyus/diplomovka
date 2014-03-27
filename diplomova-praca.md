@@ -44,21 +44,24 @@ Pravidlu sa vymykajú prípady cieleného zobrazenia obrázka iba v časti objek
 
 ## Výhody
 
-### Menej HTTP požiadaviek
+### Úspora počtu HTTP požiadaviek
 
-Namiesto množstva samostatných požiadaviek server vráti jediný obrázok s jednou hlavičkou. Vzhľadom na dlhšie komunikačné časy na mobilných sieťach a kvôli stále väčšiemu podielu mobilných zariadení na prístupoch na webové aplikácie je toto riešenie veľkým prínosom.
+Namiesto množstva samostatných požiadaviek server vráti jediný obrázok s jednou hlavičkou. Dôsledkom je zníženie počtu volaní a tým pádom aj záťaže servera.
 
 Pri požiadavkách na server sa prenáša relatívne mnoho informácií[^http-poziadavka-na-server]. Tieto informácie sú teda v bežnom prípade prenášané pre každý obrázok samostatne a teda dochádza k mnohonásobnej duplicite prenosu.
 
+Keďže je veľkosť HTTP hlavičiek veľmi rôznorodá, je vhodné spoľahnúť sa na štatistické údaje. Priemerná veľkosť hlavičky pri HTTP prenose je aktuálne 700 až 800 bytov[^priemerna-http-hlavicka]. Pre účely porovnávania bude braná do úvahy spodná hranica odhadu - 700 bytov.
+
 [^http-poziadavka-na-server]: Hlavičky obsahujúce informácie o prehliadači, cookies a iné.
+[^priemerna-http-hlavicka]: http://dev.chromium.org/spdy/spdy-whitepaper, online, 27.3.2014
 
 ### Úspora prenášaných dát
 
 Každý prenášaný obrázok obsahuje okrem obsahovej časti aj svoju hlavičku. V prípade spojenia obrázkov do jedného, je ušetrený prenos hlavičiek pre každý súbor zvlášť.
 
-Táto vlastnosť nemusí byť vždy výhodou. Často sa stáva, že obrázky nie je možné vo výslednom obrázku optimálne rozmiestniť a výsledný obrázok má väčšiu plochu (px^2^) ako je súčet plôch samostatnch obrázkov. Vďaka kompresií obrázka to nemusí nutne znamenať priamo úmerné zväčšenie dátového súboru obrázka.
+Táto vlastnosť nemusí byť vždy výhodou. Často sa stáva, že obrázky nie je možné vo výslednom obrázku optimálne rozmiestniť a výsledný obrázok má väčšiu plochu (px^2^) ako je súčet plôch samostatnch obrázkov. Vďaka kompresií obrázka to nemusí nutne znamenať priamo úmerné zväčšenie dátového súboru obrázka, dokonca niekedy je dôsledok opačný.
 
-*Sprite* je možné po vygenerovaní optimalizovať.
+*Sprite* je možné po vygenerovaní optimalizovať a tým výrazne znížiť jeho veľkosť.
 
 ### Okamžitá dostupnosť obrázka
 
@@ -205,11 +208,31 @@ error.png                        áno                    1,9 kB        560 x 72 
 
 : Detailný rozbor obrázkov
 
+### Výpočet náročnosti prenosov
+
+Pre určenie vhodnosti použitia techniky je potrebné určiť metriky podla ktorých sa určí vhodnosť použitia. Sledovanými veličinami bude počet volaní servera a úspora množstva prenášaných dát.
+
+Pri výpočtoch sa do úvahy berie iba súbor `styles.css` a relevantné obrázky z neho odkazované.
+
+#### Počet HTTP požiadaviek
+
+Prioritným dôvodom zavedenia tejto techniky je ušetrenie počtu volaní servra.
+
+Pri použití pôvodného súboru `styles.css` je prenášaných 17 samostatných PNG obrázkov.
+
+#### Objem prenášaných dát
+
+Objem prenášaných dát zahŕňa dve množiny prenášaných údajov. Na jednej strane sledujeme množstvo bytov HTTP hlavičiek a na druhej samotnú veľkosť súborov.
+
+Vzhľadom na to, že je potrebné preniesť 17 samostatncýh obrázkov a približne 700 bytov hlavičiek na jeden súbor, je výsledná veľkosť relevantných HTTP hlavičiek 11,6 kB.
+
+Súčet veľkostí obrázkov je 66,8 kB. Veľkosť CSS súboru nie je relevantná.
+
 # Manuálne vytvorenie CSS Spritu
 
 ## Spracovanie obrazových podkladov
 
-V programe Gimp[^gimp] som čo najoptimálnejšie manuálne vyskladal obrázky. Výsledkom sú dva obrazce.
+V programe Gimp[^gimp] som čo najoptimálnejšie manuálne vyskladal obrázky. Výsledkom sú dva obrazce. Pre minimalizovanie vonkajších vplyvov pri porovnávaní rôznych riešení nebola použitá žiadna extra optimalizácia výstupu, iba integrovaná kompresia vrámci štandardu PNG.
 
 [^gimp]: http://www.gimp.org
 
@@ -223,7 +246,7 @@ V rámci manuálneho skladania som vyskúšal umiestniť logá sociálnych siet�
 
 Názov súboru                      Veľkosť      Dátová úspora[^datova-uspora]         Rozmer         Využitosť plochy[^vyuzitost-plochy]
 ------------------------------  -----------  ---------------------------------  ----------------  ---------------------------------------
-manual-sprite-horizontal.png      590,0 B                  3460 %                 1 x 636 px                     100 %
+manual-sprite-horizontal.png       5,8 kB                  3460 %                 1 x 636 px                     100 %
 manual-sprite.png                 13,2 kB                  177 %                 880 x 72 px                     79,8 %
 
 : Porovnanie *spritov* a pôvodných obrázkov.
@@ -257,13 +280,64 @@ error.png              0,0
 
 ## Úprava CSS súboru
 
+Pre aplikáciu výsledných obrázkov je potrebné previesť zodpovedajúce zmeny v súbore `styles.css`. Zmeny sa týkajú výhradne názvu odkazovaného obrázka a súradníc pozadia.
+
+Nasledujúce fragmenty kódu obsahujú všetky reálne potrebné zmeny. Posledný riadok v oboch ukážkach sa v súbore nachádza dva krát - v dvoch rôznych definíciách.
+
+### Pôvodný súbor
+
+```
+background: #3e3e3e url(../images/bg.png) 0 0 repeat-x;
+background:url(../images/social/facebook.png) 0 0 no-repeat;
+background:url(../images/social/twitter.png) 0 0 no-repeat;
+background:url(../images/social/google.png) 0 0 no-repeat;
+background:url(../images/social/youtube.png) 0 0 no-repeat;
+background:url(../images/social/dribbble.png) 0 0 no-repeat;
+background:url(../images/social/flickr.png) 0 0 no-repeat;
+background:url(../images/social/pinterest.png) 0 0 no-repeat;
+background:url(../images/social/picasa.png) 0 0 no-repeat;
+background:url(../images/social/linkedin.png) 0 0 no-repeat;
+background:url(../images/social/reddit.png) 0 0 no-repeat;
+background:#f26b04 url(../images/more.png) 0 0 repeat-x;
+
+```
+
+### Zmenený súbor
+
+```
+background: #3e3e3e url(../images/manual-sprite-horizontal.png) 0 0 repeat-x;
+background:url(../images/manual-sprite.png) -592px 0 no-repeat;
+background:url(../images/manual-sprite.png) -816px 0 no-repeat;
+background:url(../images/manual-sprite.png) -656px 0 no-repeat;
+background:url(../images/manual-sprite.png) -848px 0 no-repeat;
+background:url(../images/manual-sprite.png) -560px 0 no-repeat;
+background:url(../images/manual-sprite.png) -624px 0 no-repeat;
+background:url(../images/manual-sprite.png) -752px 0 no-repeat;
+background:url(../images/manual-sprite.png) -720px 0 no-repeat;
+background:url(../images/manual-sprite.png) -688px 0 no-repeat;
+background:url(../images/manual-sprite.png) -784px 0 no-repeat;
+background:#f26b04 url(../images/manual-sprite-horizontal.png) 0 -600px repeat-x;
+```
+
 ## Výpočet užitočnosti
 
-### Objem dát
+Pre určenie vhodnosti použitia techniky je potrebné určiť metriky podla ktorých sa určí vhodnosť použitia. Sledovanými veličinami bude počet volaní servera a úspora množstva prenášaných dát.
 
-### Šetrenie HTTP požiadaviek
+Vplyv na zmenu veľkosti zdrojového CSS súboru nebudeme brať do úvahy, pretože je zanedbateľný a väčšinový vplyv má naň názov vytvoreného obrázka. Ten bol zvolený samopopisne a nie dátovo úsporne, takže by to prípadnú štatistiku výrazne skreslilo. Prírastok veľkosti súboru spôsobený zmenou pozicovania je iba 60 bytov.
 
-Vplyv optimálnosti zloženia výsledného obrázky na veľkosť PNG.
+### Počet HTTP požiadaviek
+
+Prioritným dôvodom zavedenia tejto techniky je ušetrenie počtu volaní servra.
+
+Pri použití pôvodného súboru `styles.css` bolo prenášaných 17 PNG obrázkov. Po aplikovaní zmien je potrebné preniesť iba x obrázkov - 2 *sprite* obrázky a 4 obrázky ktoré nemohli byť pre obmedzenia technológie použité.
+
+Výsledkom je úspora 11 spojení na server, čo prestavuje úsporu 64,7 % počtu požiadaviek. Vo výpočte sú brané do úvahy iba obrázky zo súboru `styles.css`.
+
+### Objem prenášaných obrázkov
+
+Po zmene je potrebné preniesť HTTP hlavičky pre šiestich rôznych obrázkov. To znamená, že veľkosť HTTP hlavičiek bude približne 4,1 kB.
+
+Súčet veľkostí šiestich prenášaných obrázkov je 42,1 kB, čo predstavuje úsporu 28,1 % prenášaných obrázkových dát. Vo výpočte sú brané do úvahy iba obrázky zo súboru `styles.css`.
 
 # Existujúce generátory
 

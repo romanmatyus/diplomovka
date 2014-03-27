@@ -39,7 +39,7 @@ h1, h2, h3, h4, h5, h6, #site-description,#navigation, #sidebar .module ul.menu 
 @media (max-width: 959px) {#wrapper{ padding:10px!important;}#header-wrap { padding: 10px!important;}}
 .count-1 { clear: both; margin-left: 0; }
 /* Body + Main Containers */
-body { color: #606060; font-weight: 400; background: #3e3e3e url(../images/bg.png) 0 0 repeat-x; font: 13px/25px Arial, Helvetica, sans-serif; nowhitespace: afterproperty; }
+body { color: #606060; font-weight: 400; background: #3e3e3e url(../images/manual-sprite-horizontal.png) 0 0 repeat-x; font: 13px/25px Arial, Helvetica, sans-serif; nowhitespace: afterproperty; }
 #box-wrap { margin: 0 auto; padding:0; }
 #main-content { padding:15px 0;}
 #wrapper-w { background:#fff; position:relative}
@@ -131,16 +131,16 @@ p a, p a:visited { line-height: inherit }
 #top h1,#top h2,#top h3,#top h4 {font-size:15px; padding:0; margin:0; color:#606060}
 #social { display:block; float:right}
 #social a.social-icon {display: inline-block; margin-left: 2px;  padding: 0;width:32px; height:32px;}
-#social a.social_1 { background:url(../images/social/facebook.png) 0 0 no-repeat; }
-#social a.social_2 { background:url(../images/social/twitter.png) 0 0 no-repeat; }
-#social a.social_3 { background:url(../images/social/google.png) 0 0 no-repeat; }
-#social a.social_4 { background:url(../images/social/youtube.png) 0 0 no-repeat; }
-#social a.social_5 { background:url(../images/social/dribbble.png) 0 0 no-repeat; }
-#social a.social_6 { background:url(../images/social/flickr.png) 0 0 no-repeat; }
-#social a.social_7 { background:url(../images/social/pinterest.png) 0 0 no-repeat; }
-#social a.social_8 { background:url(../images/social/picasa.png) 0 0 no-repeat; }
-#social a.social_9 { background:url(../images/social/linkedin.png) 0 0 no-repeat; }
-#social a.social_10 { background:url(../images/social/reddit.png) 0 0 no-repeat; }
+#social a.social_1 { background:url(../images/manual-sprite.png) -592px 0 no-repeat; }
+#social a.social_2 { background:url(../images/manual-sprite.png) -816px 0 no-repeat; }
+#social a.social_3 { background:url(../images/manual-sprite.png) -656px 0 no-repeat; }
+#social a.social_4 { background:url(../images/manual-sprite.png) -848px 0 no-repeat; }
+#social a.social_5 { background:url(../images/manual-sprite.png) -560px 0 no-repeat; }
+#social a.social_6 { background:url(../images/manual-sprite.png) -624px 0 no-repeat; }
+#social a.social_7 { background:url(../images/manual-sprite.png) -752px 0 no-repeat; }
+#social a.social_8 { background:url(../images/manual-sprite.png) -720px 0 no-repeat; }
+#social a.social_9 { background:url(../images/manual-sprite.png) -688px 0 no-repeat; }
+#social a.social_10 { background:url(../images/manual-sprite.png) -784px 0 no-repeat; }
 /* Navigation */
 #navbar-wrap { padding: 0px; margin:0;}
 #navbar { position: relative; height: 55px;}
@@ -180,7 +180,7 @@ p a, p a:visited { line-height: inherit }
 #slide-wrap { padding:10px 0; color:#999}
 #slide-wrap a {color: #F26904;}
 #slide-wrap a:hover { color:#fff}
-#slide-wrap a.more { background:#f26b04 url(../images/more.png) 0 0 repeat-x; border:1px solid #f26904; color:#fff; padding:5px 15px;  -webkit-border-radius: 15px; -moz-border-radius: 15px; border-radius: 15px;}
+#slide-wrap a.more { background:#f26b04 url(../images/manual-sprite-horizontal.png) 0 -600px repeat-x; border:1px solid #f26904; color:#fff; padding:5px 15px;  -webkit-border-radius: 15px; -moz-border-radius: 15px; border-radius: 15px;}
 #slide-wrap a.more:hover { color:#303030}
 #slide-wrap .flex-caption{ margin-top:50px;}
 #slide-wrap .flex-image {padding:0;margin:0;display:block}
@@ -314,7 +314,7 @@ input[type="button"], input[type="submit"], button[type="submit"], button[type="
 input[type="button"]:active, input[type="submit"]:active, button[type="submit"]:active, button[type="button"]:active { background-image: linear-gradient(to bottom, #efefef 0px, #fff 100%); border-color: #bbb #bbb #ddd; box-shadow: 0 1px 5px rgba(0, 0, 0, 0.10) inset; }
 input[type="button"]:hover, input[type="submit"]:hover, button[type="submit"]:hover, button[type="button"]:hover{ background: #fff }
 /* Read More */
-a.btn-readmore { background:#f26b04 url(../images/more.png) 0 0 repeat-x; border:1px solid #f26904; color:#fff; padding:5px 10px;  -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;}
+a.btn-readmore { background:#f26b04 url(../images/manual-sprite-horizontal.png) 0 -600px repeat-x; border:1px solid #f26904; color:#fff; padding:5px 10px;  -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;}
 a.btn-readmore:hover { color:#303030}
 /* Mailto */
 .mailto { background:#fff; color:#222; padding:10px;}
