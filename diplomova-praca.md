@@ -28,6 +28,20 @@ Pri jeho použití treba dbať aj na jeho dve obmedzenia:
 
 Použitie PNG nemusí byť vyslovene pravidlom, pretože vhodne vytvorený GIF súbor, resp. JPG súbor s kompresiou môžu dosahovať lepšie výsledky. Všetko závisí od vstupných súborov. Ak by bolo na vstupe napríklad viacero väčších obrázkov v truecolor, tak by malo zmysel uvažovať o JPG výstupe. JPG bude úplne diskvalifikovaný, ak bude niektorý obrázok na vstupe obsahovať priesvitnú časť.
 
+## Súradnicový systém
+
+Pri určovaní pozície zobrazovaného výrezu je použitý dvojrozmerný súradnicový systém s osou *x* a *y*. Koordináty *[0, 0]* označujú ľavý horný roh. Vertikálna os *y* nenadobúda kladné hodnoty smerom hore, ako je to štandardne, ale dolu.
+
+![Súradnicový systém pozicovania pozadia v CSS](images/coordinate-system.png)
+
+Tiež je dôležité uvedomiť si, že sa nemení pozícia zobrazeného výrezu, ale vo výreze sa posúva pozadie.
+
+![Ukážka vplyvu súradníc na posun pozadia](images/background-positioning.png)
+
+Z uvedeného vyplýva, že prakticky každý výrez spritu bude mať počiatočné koordináty *x <= 0* a *y <= 0*.
+
+Pravidlu sa vymykajú prípady cieleného zobrazenia obrázka iba v časti objektu. Keďže pre tieto extrémne prípady nie je reálne opodstatnenie, budú v práci ignorované.
+
 ## Výhody
 
 ### Menej HTTP požiadaviek
@@ -48,9 +62,9 @@ Táto vlastnosť nemusí byť vždy výhodou. Často sa stáva, že obrázky nie
 
 ### Okamžitá dostupnosť obrázka
 
-Webový grafici často vyžadujú zmenu grafiky po interakcií kurzora[^interakcie kurzora] s nejakým elementom na stránke. Toto je zväčša prakticky vyriešené zmenou obrázka pozadia na úrovni CSS. V tomto prípade nastáva problém s oneskoreným načítaním pozadia. Prehliadač zaregistruje potrebu vykreslenia obrázka, ale ten ešte nie je k dispozícií. Preto oň server požiada a stiahne ho. Toto môže bežne trvať približne pol sekundy. Keďže toto prebliknutie kazí používateľský zážitok z používania aplikície, dizajnéri niekedy vytvárajú čiastkové *sprity* zložené z pôvodného pozadia a pozadia po interakcií. Toto je žiaľ pracné a nesystémové riešenie.
+Webový grafici často vyžadujú zmenu grafiky po interakcií kurzora[^interakcie-kurzora] s nejakým elementom na stránke. Toto je zväčša prakticky vyriešené zmenou obrázka pozadia na úrovni CSS. V tomto prípade nastáva problém s oneskoreným načítaním pozadia. Prehliadač zaregistruje potrebu vykreslenia obrázka, ale ten ešte nie je k dispozícií. Preto oň server požiada a stiahne ho. Toto môže bežne trvať približne pol sekundy. Keďže toto prebliknutie kazí používateľský zážitok z používania aplikície, dizajnéri niekedy vytvárajú čiastkové *sprity* zložené z pôvodného pozadia a pozadia po interakcií. Toto je žiaľ pracné a nesystémové riešenie.
 
-[^interakcie kurzora]: Umiestnenie kurzora nad element, kliknutie naň a iné.
+[^interakcie-kurzora]: Umiestnenie kurzora nad element, kliknutie naň a iné.
 
 ## Nevýhody
 
@@ -171,7 +185,7 @@ Obsahuje 17 obrázkov s nasledujúcimi definíciami:
 Názov súboru         Použiteľný pre CSS Sprite?        Veľkosť           Rozmer              Plocha
 -----------------  ------------------------------  ---------------  ----------------  ---------------------
 bg.png                       horizontálne              19,0 kB         50 x 600 px        30 000 px^2^
-header.png                       áno                   18,8 kB        980 x 600 px        588 000 px^2^
+header.png                       nie                   18,8 kB        980 x 600 px        588 000 px^2^
 facebook.png                     áno                    1,9 kB         32 x 32 px          1 024 px^2^
 twitter.png                      áno                    2,1 kB         32 x 32 px          1 024 px^2^
 google.png                       áno                    2,0 kB         32 x 32 px          1 024 px^2^
@@ -187,7 +201,7 @@ sidebar-li2.png                  nie                    1,5 kB          7 x 7 px
 sidebar-li1.png                  nie                    1,5 kB          7 x 7 px             49 px^2^
 arrow_up.png                     nie                    1,3 kB         50 x 50 px          2 500 px^2^
 error.png                        áno                    1,9 kB        560 x 72 px          1 024 px^2^
-**SPOLU**                                            **62,9 kB**                        **631 898 px^2^**
+**SPOLU**                                            **66,8 kB**                        **631 898 px^2^**
 
 : Detailný rozbor obrázkov
 
@@ -201,19 +215,21 @@ V programe Gimp[^gimp] som čo najoptimálnejšie manuálne vyskladal obrázky. 
 
 Prvý *sprite* s názvom *manual-sprite-horizontal.png* obsahuje súbory *bg.png* a *more.png* pod sebou. Súbor *bg.png* mal pôvodne šírku 50 px. Vzhľadom na nutnosť rovnakej šírky všetkých použitých horizontálnych obrázkov som manuálne zúžil obrázok na 1 px. Bolo to možné, pretože súbor obsahuje iba prechod a nie zložitejšiu vzorku.
 
-Druhý zostavený súbor, *manual-sprite.png*, obsahuje zvyšných 12 použiteľných obrázkov. Najprv som do ľavého horného rohu umiestnil najväčší obrázok *header.png*. Pod ten som vložil druhý najväčší - *error.png*. Následne vedla neho vpravo som vyskladal vedla seba zvyšné použiteľné obrázky.
+Druhý zostavený súbor, *manual-sprite.png*, obsahuje zvyšných 11 použiteľných obrázkov. Najprv som do ľavého horného rohu umiestnil najväčší obrázok - *error.png*. Následne som vedla neho vpravo vyskladal zvyšné použiteľné obrázky.
+
+V rámci manuálneho skladania som vyskúšal umiestniť logá sociálnych sietí do dvoch radov, ale z dôvodu spôsobu fungovnia kompresie PNG to spôsobilo nárast dátovej veľkosti obrázka o 439 B. Od toho som ustúpil, pretože je prioritou výsledná dátová veľkosť súboru a nie percentuálne využitie plochy obrázka.
 
 ![manual-sprite.png](images/manual-sprite.png)
 
 Názov súboru                      Veľkosť      Dátová úspora[^datova-uspora]         Rozmer         Využitosť plochy[^vyuzitost-plochy]
 ------------------------------  -----------  ---------------------------------  ----------------  ---------------------------------------
-manual-sprite-horizontal.png      590,0 B                  34,6 x                 1 x 636 px                     924,6 x
-manual-sprite.png                 29,0 kB                  1,46 x                 980 x 672 px                    91,0 x
+manual-sprite-horizontal.png      590,0 B                  3460 %                 1 x 636 px                     100 %
+manual-sprite.png                 13,2 kB                  177 %                 880 x 72 px                     79,8 %
 
 : Porovnanie *spritov* a pôvodných obrázkov.
 
-[^datova-uspora]: Pomer súčtu veľkosti jednotlivých čiastkových obrázkov s výsledným obrázkom.
-[^vyuzitost-plochy]: Pomer súčtu plôch jednotlivých čiastkových obrázkov s výsledným obrázkom.
+[^datova-uspora]: Pomer súčtu dátovej veľkosti jednotlivých čiastkových obrázkov s výsledným obrázkom.
+[^vyuzitost-plochy]: Pomer súčtu plôch jednotlivých čiastkových obrázkov (v sprite) s rozmerom výsledného obrázka.
 
 Zoznam súborov      Súradnice
 ----------------  -------------
@@ -225,18 +241,17 @@ more.png               0,600
 
 Zoznam súborov      Súradnice
 ----------------  -------------
-header.png             0,0  
-dribbble.png         560,600
-facebook.png         592,600
-flickr.png           624,600
-google.png           656,600
-linkedin.png         688,600
-picasa.png           720,600
-pinterest.png        752,600
-reddit.png           784,600
-twitter.png          816,600
-youtube.png          848,600
-error.png              0,600
+dribbble.png         560,0
+facebook.png         592,0
+flickr.png           624,0
+google.png           656,0
+linkedin.png         688,0
+picasa.png           720,0
+pinterest.png        752,0
+reddit.png           784,0
+twitter.png          816,0
+youtube.png          848,0
+error.png              0,0
 
 : Zoznam obrázkov v *manual-sprite.png*
 
