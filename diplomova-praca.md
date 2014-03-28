@@ -240,7 +240,9 @@ Prvý *sprite* s názvom *manual-sprite-horizontal.png* obsahuje súbory *bg.png
 
 Druhý zostavený súbor, *manual-sprite.png*, obsahuje zvyšných 11 použiteľných obrázkov. Najprv som do ľavého horného rohu umiestnil najväčší obrázok - *error.png*. Následne som vedla neho vpravo vyskladal zvyšné použiteľné obrázky.
 
-V rámci manuálneho skladania som vyskúšal umiestniť logá sociálnych sietí do dvoch radov, ale z dôvodu spôsobu fungovnia kompresie PNG to spôsobilo nárast dátovej veľkosti obrázka o 439 B. Od toho som ustúpil, pretože je prioritou výsledná dátová veľkosť súboru a nie percentuálne využitie plochy obrázka.
+V rámci manuálneho skladania som vyskúšal umiestniť logá sociálnych sietí do dvoch radov, ale z dôvodu spôsobu fungovnia kompresie PNG to spôsobilo nárast dátovej veľkosti obrázka o 439 B. Od toho som ustúpil, pretože je prioritnejšia výsledná dátová veľkosť súboru a nie percentuálne využitie plochy obrázka.
+
+Z dôvodu snahy o minimalizáciu počtu obrázkov, som sa pokúsil vložiť do obrázku `manual-sprite.png` aj horizontálne opakované obrázky `bg.png` a `more.png`. Pri tomto postupe je nutné roztiahnuť horizontálne sa opakujúce obrázky na celú šírku obrázka. Pre zúženie obrázka na minimum som vykladal ikony sociálnych sietí pod najširší obrázok `error.png`. Po spracovaní vznikol obrazec s rozmermi 560 x 740 px a veľkosťou 44,4 kB. V tomto prípade je teda dôsledkom úspora prenosov o jeden obrázok, ale veľkosti obrázku je až 44,4 kB oproti súčtu obrázkov dvoch samostatných spritov - 13,8 kB. Z dôvodu viacnásobného zväčšenia spritu som v tomto konkrétnom prípade postup zavrhol. V niektorých vhodnejších prípadoch môže poskytovať zaujímavé výsledky.
 
 ![manual-sprite.png](images/manual-sprite.png)
 
