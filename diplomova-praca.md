@@ -133,6 +133,16 @@ Z dôvodu nepodporovania animácie pri PNG súboroch[^standard-exportu], nemôž
 
 [^standard-exportu]: Formát PNG je štandardne používaný ako výstupný formát *sprite* obrázka.
 
+### Prenášanie nepotrebných dát
+
+V prípade použitia *spritov* je prenášaný komplexný obrazec obsahujúci všetky čiastkové obrázky. Z toho dôvodu môžu nastať prípady, keď sa používateľovy odošlú aj obrazové body, ktoré nie sú pre aktuálne zobrazenie potrebné. Dôsledkom je o niečo menšia efektivita použitia technológie.
+
+Problém je čiastočne minimalizovaný menšou výslednou veľkosťou *spritu* ako je súčet veľkostí vložených obrázkov. Preto nie sú dôsledky kritické.
+
+Pre zmenšenie dopadu tohoto problému je potrebné udržovať v CSS súboroch poriadok. Obsahom majú byť iba definície, ktoré sú pre daný dizajn potrebné. Ak je táto podmienky splnená a obrazec sa na strane klienta uchováva v dočasnej pamäti, prakticky je problém eliminovaný. Aj keď sa pri prvom spojení prenesú nejaké byty s nepotrebnými frakmentami obrázkov, budú neskôr použité a vo výsledku ušetria komunikáciu so serverom.
+
+Jednotlivé *sprity* je vhodné vytvárať pre každý CSS súbor zvlášť a nie až po zľúčení odosielaných CSS súborov. Ak bude množstvo CSS súborov veľmi variabilné, boli by generované *sprity* pre rôzne pohľady rôzne. Toto by spôsobovalo problémy s efektným využívaním dočasnej pamäte.
+
 ## Konkurenčné riešenie Data URI
 
 Pre úplnosť je vhodné spomenúť techniku urýchlenia webu pomocou Data URL[^specifikacia-data-url]. Pri tejto technike je v CSS odkaz na súbor (obrázok) nahradený za hlavičku a textovú reprezentáciu obrázka kódovaním base64. Hlavnou nevýhodou je zväčšenie prenášaného množstva dát o 33% oproti originálu.
