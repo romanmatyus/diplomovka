@@ -143,9 +143,11 @@ Pre zmenšenie dopadu tohoto problému je potrebné udržovať v CSS súboroch p
 
 Jednotlivé *sprity* je vhodné vytvárať pre každý CSS súbor zvlášť a nie až po zľúčení odosielaných CSS súborov. Ak bude množstvo CSS súborov veľmi variabilné, boli by generované *sprity* pre rôzne pohľady rôzne. Toto by spôsobovalo problémy s efektným využívaním dočasnej pamäte.
 
-## Konkurenčné riešenie Data URI
+## Konkurenčné riešenie Data URL
 
-Pre úplnosť je vhodné spomenúť techniku urýchlenia webu pomocou Data URL[^specifikacia-data-url]. Pri tejto technike je v CSS odkaz na súbor (obrázok) nahradený za hlavičku a textovú reprezentáciu obrázka kódovaním base64. Hlavnou nevýhodou je zväčšenie prenášaného množstva dát o 33% oproti originálu.
+Pre úplnosť je vhodné spomenúť konkurenčnú techniku urýchlenie načítania webu pomocou Data URL[^specifikacia-data-url]. Pri tejto technike je v CSS odkaz na súbor (obrázok) nahradený za hlavičku a textovú reprezentáciu obrázka kódovaním base64. Hlavnou nevýhodou je zväčšenie prenášaného množstva dát o 33% oproti originálu. Preto býva technika používané iba na veľmi malé obrázky, kde je absolútny nárast veľkosti iba v bytoch.
+
+Zaujímavou možnosťou sa javí kombinácia *CSS Sprite* a *Data URL* tak, že sa do *Data URL* prevedú obrázky, ktoré nemohli byť z nejakého dôvodu zaradené do *spritu*.
 
 Možným obmedzením je problematická podpora pseudoprotokolu `data` v Internet Exploreri 8 a starších. IE 8 podporuje *Data URL* s maximálnou veľkosťou 32 kB a staršie nepodporujú túto funkciu vôbec.
 
