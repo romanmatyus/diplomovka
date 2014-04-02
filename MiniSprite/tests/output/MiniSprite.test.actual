@@ -1,0 +1,12 @@
+MiniSprite\MiniSprite::__set_state(array(
+	'rawInput' => NULL,
+	'basePath' => NULL,
+	'images' => array(),
+	'folders' => array(
+		'horizontalFolder' => MiniSprite\HorizontalFolder::__set_state(array()),
+	),
+	'foldersOutput' => array(),
+	'analyzer' => NULL,
+	'composer' => NULL,
+	'cssWriter' => NULL,
+))

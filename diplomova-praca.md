@@ -377,6 +377,8 @@ Praktickou časťo diplomovej práce je vytvorenie ideálneho nástroja na využ
 
 Výsledným nástrojom je knižnica v jazyku PHP s podporou minimálnej verzie PHP 5.3.
 
+Knižnica bude programovaná vo vlastnom mennom priestore s názvom *MiniSprite*.
+
 ## Ciele
 
 Na základe predcházajúcej analýzi vlastného manuálneho spracovania a poloautomatizovaného spracovania použitím dostupných generátorov je možné stanoviť ciele a postupy ideálneho generátora.
@@ -393,11 +395,125 @@ Predvolená konfigurácia knižnice musí vylučovať akékoľvek defekty grafik
 
 Všetky dôležité parametre spracovania budú jednoducho nastaviteľné bez zásahu do zdrojového kódu aplikácie.
 
+Kontrola správnych typov a použiteľnosti nastavení bude prevádzaná pri samotnom nastavovaní a nie až pri použití nezmyselného nastavenia. Predíde sa tým mnohým problémom spôsobeným neskorím odhalením chýb. Tieto chyby nebudú špeciálne vykreslované ani nič podobné, ale korektne sa vytvoria výnimky.
+
 ### Online generátor
 
 Schopnosti generátora majú byť demonštrovateľné online, bez nutnosti inštalácie špeciálneho softvéru, alebo začlenenia zdrojového kódu generátora do projektu.
 
+## Prostrednie
+
+Pre zvýšenie stability a pohodlnejší vývoj bude knižnica programovaná testami riadeným vývojom, tzv. TTD[^ttd]. Testy sa budú nachádzať v zložke `tests` a budú programované v testovacom frameworku `Nette Tester`[^nette-tester].
+
+[^ttd]: Test driven development
+[^nette-tester]: https://github.com/nette/tester
+
 ## Popis funkčnosti
+
+Pre čo naväčšiu modulárnosť je dôležité knižnicu rozdeliť do viacerích vrstiev. Každá vrstva bude mať zodpovednosť za konkrétnu časť spracovania a bude nahraditeľná výmenou triedy implementujúcej zvolené rozhranie. Riadenie s správu modulov bude mať na starosti minimalistické jadro.
+
+Dôvodom rozhodnutia pre takúto architektúru systému je hlavne možnosť vkladania nových, zdokonalených, algoritmov na rozvrhnutie obrázkov v sprite. Negatívnym dôsledkom architektúri je väčšie množstvo súborov a tým aj zložitosť riešenia oproti monolitickej architektúre v ktorej by boli všetky súčasti napevno.
+
+### Jadro
+
+Jadro softvéru bude v triede MiniSprite s rovnomenným menným priestorom.
+
+Hlavné úlohy:
+
+- konfigurácia,
+- prevzatie vstupných dát,
+- získanie všetkých obrázkových vstupov,
+- volanie rôznych algoritmov na skladanie spritu,
+- vyhodnotenie najlepšieho algoritmu podla priorít,
+- zloženie obrázku,
+- zmena css súboru.
+
+Knižnicu bude možné prevádzkovať v MVC frameworkoch ako službu. To znamená, že po prvotnom inicializovaní a korektnom nastavení môže viacnásobne spracúvať rôzne vstupy.
+
+#### Konfigurácia
+
+Nastavenie prostredia a obmedzení pre beh knižnice bude možné vykonať viacerími spôsobmi.
+
+1. Dodnie asociatívneho poľa kľúčov a hodnôt ako prvého parametru pri vytváraní objektu.
+2. Dodnie asociatívneho poľa kľúčov a hodnôt metódou `setConfig()`.
+3. Nastavením konkrétnych parametrov špecializovanými metódami. Kvôli rozsahu budú tieto metódy existovať iba pre najdôležitejšie parametre.
+
+| Názov              | Typ             | Metóda                  | Popis                                                             |
+|--------------------|-----------------|-------------------------|-------------------------------------------------------------------|
+| `basePath`         | reťazec         | `setBasePath()`         | Nastaví základnú cestu od ktorej sa tvoria relatívne cesty v CSS. |
+| `outputNormal`     | reťazec         | `setOutputNormal()`     | Nastaví cestu k spritu bez orientácie.                            |
+| `outputHorizontal` | reťazec         | `setOutputHorizontal()` | Nastaví cestu k spritu s horizontálnou orientáciou.               |
+| `outputVertical`   | reťazec         | `setOutputVertical()`   | Nastaví cestu k spritu s Vertikálnou orientáciou.                 |
+| `folders`          | Pole `IFolders` |                         | Nastaví pole tried s algoritmami skladania obrazcov.              |
+|                    | `IFolders `     | `addFolder()`           | Pridá triedu s algoritmom na skladanie obrazcov.                  |
+| `analyzer`         | `IAnalyzer`     | `setAnalyzer()`         | Nastaví triedu na vyhodnotenie najvhodnejšieho vyskladania.       |
+| `composer`         | `IComposer`     | `setComposer()`         | Nastaví triedu na vygenerovanie sprite obrázka.                   |
+| `cssWriter`        | `ICssWriter`    | `setCssWriter()`        | Nastaví triedu pregenerovanie CSS súboru.                         |
+
+: Detail konfiguračných možností.
+
+#### Prevzatie vstupných dát
+
+Rozhraním pre vstup bude verejná metóda `compile()` s dvomi parametrami:
+
+1. samotný CSS kód určený na spracovanie,
+2. základná cesta k priečinku odkiaľ sa majú určovať relatívne cesty k zdrojom.
+
+Návratovou hodnotou bude prekompilovaný obsah CSS vstupu.
+
+#### Získanie obrázkov
+
+Zo vstupného CSS kódu je potrebné získať definíce všetkých obrázkov. Na to je možné použiť regulárny výraz `~\bbackground(-image)?\s*:(.*?)url\s*\(\s*(\'|")?(?<image>.*?)\3?\s*\)~i`.
+
+Pre unifikáciu práce so vstupnými obrázkami bude použitý *prototyp* `Image`.
+
+#### Volanie algoritmov skladania spritu
+
+Po naplnení vstupných dát knižnica iteruje nad zaregistrovanými objektami s algoritmami skladania spritov. Algoritmi obsahujú triedy rozhrania `IFolder`.
+
+Jednotlivé objekty generujú ako výstup unifikovaný objekt triedy - prototyp `Fold`.
+
+#### Vyhodnotenie najlepšieho algoritmu
+
+Na základe výstupov algoritmov skladania je potrebné zvoliť jeden ktorý bude následne použitý. Objekt typu `IAnalyzer`, zvolený ako ideálny podla preferencií používateľa, ohodnotí pole prototypov `Fold` získané v predchádzajúcom kroku a vyberie víťaza.
+
+Analyzované môžu byť rôzne hľadiská, ako napríklad rozmer, veľkosť, počet ušetrených požiadaviek a podobne.
+
+#### Vygenerovanie obrázku
+
+Samotné generovanie obrázku má na starosti trieda s rozhraním `IComposer`. Vstupom triedy je víťazný prototyp `Fold`. Na základe obsiahnutých informácií o obrázkoch a ich súradniciach sa obrázky zapíšu do výsledného spritu, prípadne viacerích podla orientácií.
+
+#### Prepísanie obsahu CSS
+
+Rovnaký vstup ako je potrebný na vykreslenie obrázku je použitý na pregenerovanie CSS vstupu. Aktualizuje sa názov obrázku pozadia a jeho súradnice. Zvyšok zostane pôvodný. Túto operáciu prevádza trieda rozhrania `ICssWriter`.
+
+### Prototyp Image
+
+Táto trieda je unifikovanou prepravkou pre distribúciu obrázkov naprieč knižnicou.
+
+| Názov atribútu | Nastaviteľný | Popis                                            |
+|----------------|:------------:|--------------------------------------------------|
+| `url`          |      áno     | Odkaz na súbor.                                  |
+| `type`         |      áno     | Typ obrázku: "gif","jpeg","png".                 |
+| `content`      |      áno     | Binárny obsah obrázku.                           |
+| `sources`      |      áno     | Pole CSS definícií kde sa obrázok nachádza.      |
+| `size`         |      nie     | Veľkosť súboru v bytoch.                         |
+| `orientation`  |      áno     | Orientácia: "normal", "horizontal", "vertical".  |
+| `width`        |      nie     | Šírka obsahu.                                    |
+| `height`       |      nie     | Výška obsahu.                                    |
+
+: Atribúty prototypu Image
+
+### Prototyp Fold
+
+| Názov metódy  | Popis                                                                                            |
+|---------------|--------------------------------------------------------------------------------------------------|
+| `addImage()`  | Pridáva obrázok do kolekcie. Má parametre orientácia, Image a x/y - súradnica.                   |
+| `getWidth()`  | Vráti šírku obrazca.                                                                             |
+| `getHeight()` | Vráti výšku obrazca.                                                                             |
+| `getImages()` | Vráti pole obrázkov v kolekcií. Voliteľným parametrom je orientácia - filter vracaných obrázkov. |
+
+: Metódy prototypu Fold
 
 ## Riešenie netriviálnych problémov
 
