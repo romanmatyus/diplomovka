@@ -373,6 +373,30 @@ http://www.web2generators.com/graphism/css_sprite_creator
 
 # Vlastné riešenie
 
+Praktickou časťo diplomovej práce je vytvorenie ideálneho nástroja na využitie technológie CSS Sprite. Nástroj by mal poskytovať pohodlnejšie a pokročilejšie spracovanie vstupov ako doteraz existujúce riešenia.
+
+Výsledným nástrojom je knižnica v jazyku PHP s podporou minimálnej verzie PHP 5.3.
+
+## Ciele
+
+Na základe predcházajúcej analýzi vlastného manuálneho spracovania a poloautomatizovaného spracovania použitím dostupných generátorov je možné stanoviť ciele a postupy ideálneho generátora.
+
+### Plne automatické spracovanie
+
+Na rozdieľ od súčastných genrátorov vstupom nebude sada obrázkov, ale samotná CSS definícia. Modulárny systém s inteligentným hľadaním optimálnych riešení zabezpečí bezpracné a plne automatizované spracovanie.
+
+### Bezpečnosť
+
+Predvolená konfigurácia knižnice musí vylučovať akékoľvek defekty grafiky spôsobené použitím generátora. Môžu nastať situácie, keď by po benevolentnejšie nastavenie mohlo spôsobiť zvýšenie efektivity. V prípade ak by v určitých prípadoch mohlo toto nastavenie spôsobovať problémy, predvolene bude vypnuté.
+
+### Konfigurovateľnosť
+
+Všetky dôležité parametre spracovania budú jednoducho nastaviteľné bez zásahu do zdrojového kódu aplikácie.
+
+### Online generátor
+
+Schopnosti generátora majú byť demonštrovateľné online, bez nutnosti inštalácie špeciálneho softvéru, alebo začlenenia zdrojového kódu generátora do projektu.
+
 ## Popis funkčnosti
 
 ## Riešenie netriviálnych problémov
