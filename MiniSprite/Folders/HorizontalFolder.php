@@ -48,7 +48,7 @@ class HorizontalFolder implements IFolder
 				$image->positionY = $sameImage->positionY;
 				$image->getCssBlock()->{"background-position"} = (-1*$sameImage->positionX+$position["horizontal"]) . "px ".(-1*$sameImage->positionY+$position["vertical"])."px";
 			}
-			$_imagesProcessed[$image->getRepeating()][] = $image;
+			$_imagesProcessed[$image->getRepeating()][] = clone $image;
 		}
 		
 		return array(

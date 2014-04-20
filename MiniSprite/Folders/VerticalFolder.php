@@ -48,9 +48,9 @@ class VerticalFolder implements IFolder
 				$image->positionY = $sameImage->positionY;
 				$image->getCssBlock()->{"background-position"} = (-1*$sameImage->positionX+$position["horizontal"]) . "px ".(-1*$sameImage->positionY+$position["vertical"])."px";
 			}
-			$_imagesProcessed[$image->getRepeating()][] = $image;
+			$_imagesProcessed[$image->getRepeating()][] = clone $image;
 		}
-		//print_r($_imagesProcessed[Image::NORMAL]);exit;
+
 		return array(
 			Image::NORMAL => new Fold($_imagesProcessed[Image::NORMAL]),
 		);
