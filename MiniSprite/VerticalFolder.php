@@ -7,13 +7,13 @@ namespace MiniSprite;
 * @copyright (c) Roman Mátyus 2014
 * @license MIT
 */
-class HorizontalFolder implements IFolder
+class VerticalFolder implements IFolder
 {
 	public function generate(array $images)
 	{
 		$_imagesList = array();
 		$_imagesProcessed = array();
-		$coordinateX = 0;
+		$coordinateY = 0;
 
 		// filter usable files
 		foreach ($images as $image) {
@@ -39,10 +39,10 @@ class HorizontalFolder implements IFolder
 				: NULL;
 
 			if(is_null($sameImage)) {
-				$image->positionX = $coordinateX;
-				$image->positionY = 0;
-				$image->getCssBlock()->{"background-position"} = (-1*$coordinateX+$position["horizontal"]) . "px ".$position["vertical"]."px";
-				$coordinateX += $image->getWidth();
+				$image->positionX = 0;
+				$image->positionY = $coordinateY;
+				$image->getCssBlock()->{"background-position"} =  $position["horizontal"]. "px ".(-1*$coordinateY+$position["vertical"])."px";
+				$coordinateY += $image->getHeight();
 			} else {
 				$image->positionX = $sameImage->positionX;
 				$image->positionY = $sameImage->positionY;
@@ -50,7 +50,7 @@ class HorizontalFolder implements IFolder
 			}
 			$_imagesProcessed[$image->getRepeating()][] = $image;
 		}
-		
+		//print_r($_imagesProcessed[Image::NORMAL]);exit;
 		return array(
 			Image::NORMAL => new Fold($_imagesProcessed[Image::NORMAL]),
 		);

@@ -9,5 +9,5 @@ namespace MiniSprite;
 */
 interface IFolder
 {
-	public function generate();
+	public function generate(array $images);
 }

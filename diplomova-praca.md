@@ -487,6 +487,16 @@ Samotné generovanie obrázku má na starosti trieda s rozhraním `IComposer`. V
 
 Rovnaký vstup ako je potrebný na vykreslenie obrázku je použitý na pregenerovanie CSS vstupu. Aktualizuje sa názov obrázku pozadia a jeho súradnice. Zvyšok zostane pôvodný. Túto operáciu prevádza trieda rozhrania `ICssWriter`.
 
+### Skladanie spritu
+
+Návrh spôsobu skladania spritu zabezpečujú objekty rozhrania `IFolder`. Jedinou verejnou metódou je `generate()`, s jedným parametrom - polom s prvkami prototypov `Image`.  Návratovou hodnotou je prototyp `Fold` reprezentujúci výsledok interného algoritmu.
+
+#### Horizontálne usporiadanie
+
+Pri horizontálnom usporiadaní sa v cykle iteruje nad vstupným polom obrázkov. Na základe typu orientácie obrázka sa určuje do ktorého spritu budú obrázky vložené.
+
+Obrázky bez orientácie sa vyskladajú vedla seba bez bližšie určeného poradia.
+
 ### Prototyp Image
 
 Táto trieda je unifikovanou prepravkou pre distribúciu obrázkov naprieč knižnicou.
