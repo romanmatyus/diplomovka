@@ -1,11 +1,11 @@
 <?php
 
-require '../vendor/Tester/Tester/bootstrap.php';
-require '../Image.php';
-require '../CssBlock.php';
-require '../IFolder.php';
-require '../HorizontalFolder.php';
-require '../Fold.php';
+require '../../vendor/Tester/Tester/bootstrap.php';
+require '../../Image.php';
+require '../../CssBlock.php';
+require '../../Folders/IFolder.php';
+require '../../Folders/HorizontalFolder.php';
+require '../../Fold.php';
 
 use Tester\Assert;
 use MiniSprite\Image;
@@ -26,19 +26,19 @@ class HorizontalFolderTest extends Tester\TestCase
 			background:url(../images/google.png) 0 0 no-repeat;
 		}';
 		$cssBlock = new CssBlock($cssDef);
-		$images[] = new Image("assets/google.png", $cssBlock);
+		$images[] = new Image("../assets/google.png", $cssBlock);
 
 		$cssDef = 'div#twitter {
 			background:url(../images/twitter.png) 0 0 no-repeat;
 		}';
 		$cssBlock = new CssBlock($cssDef);
-		$images[] = new Image("assets/twitter.png", $cssBlock);
+		$images[] = new Image("../assets/twitter.png", $cssBlock);
 
 		$cssDef = 'div#youtube {
 			background:url(../images/youtube.png) 0 0 no-repeat;
 		}';
 		$cssBlock = new CssBlock($cssDef);
-		$images[] = new Image("assets/youtube.png", $cssBlock);
+		$images[] = new Image("../assets/youtube.png", $cssBlock);
 
 		$folder = new HorizontalFolder;
 		$folds = $folder->generate($images);
@@ -54,22 +54,22 @@ class HorizontalFolderTest extends Tester\TestCase
 		$images = array();
 
 		$images[] = new Image(
-			"assets/100x200.png", 
+			"../assets/100x200.png", 
 			new CssBlock('div#block1 {background:url(../images/100x200.png) 0 0 no-repeat;}')
 		);
 
 		$images[] = new Image(
-			"assets/300x150-2.png", 
+			"../assets/300x150-2.png", 
 			new CssBlock('div#block2 {background:url(../images/300x150-2.png) -25px -25px no-repeat;}')
 		);
 
 		$images[] = new Image(
-			"assets/300x150-2.png", 
+			"../assets/300x150-2.png", 
 			new CssBlock('div#block3 {background:url(../images/300x150-2.png) -175px -25px no-repeat;}')
 		);
 
 		$images[] = new Image(
-			"assets/200x100.png", 
+			"../assets/200x100.png", 
 			new CssBlock('div#block2 {background:url(../images/200x100.png) 0px 0px no-repeat;}')
 		);
 
