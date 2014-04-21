@@ -27,7 +27,6 @@ Assert::equal('BODY td .div a[href^="ddd"] {
 	width: 100px;
 	height: 1 px;
 }
-
 ', (string)$cssBlock);
 
 $cssBlock->{"background-position"} = "-10px -13px";
@@ -145,7 +144,6 @@ Assert::equal('BODY td .div a[href^="ddd"] {
 	width: 100px;
 	height: 1 px;
 }
-
 ', (string)$cssBlock);
 
 $cssBlock->background = "url(../images/twitter.png) -32 px 0 no-repeat";

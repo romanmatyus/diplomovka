@@ -110,7 +110,7 @@ class CssBlock
 			if (!preg_match("/background-(color|image|position|repeat|attachment)/i",$parameter))
 				$output .= "\t" . $parameter . ": " . $value . ";\n";
 		};
-		$output .= "}\n\n";
+		$output .= "}\n";
 		return $output;
 	}
 
