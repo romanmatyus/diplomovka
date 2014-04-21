@@ -58,7 +58,6 @@ class VerticalFolder implements IFolder
 
 	private function findByUrl($images, $url)
 	{
-		$i=0;
 		foreach ($images as $image) {
 			if ($image->getUrl() === $url)
 				return $image;
