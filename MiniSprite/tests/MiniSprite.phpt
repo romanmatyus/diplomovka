@@ -2,18 +2,7 @@
 
 namespace MiniSprite;
 
-require '../vendor/Tester/Tester/bootstrap.php';
-require '../Image.php';
-require '../CssBlock.php';
-require '../Folders/IFolder.php';
-require '../Folders/HorizontalFolder.php';
-require '../Folders/VerticalFolder.php';
-require '../Analyzers/IAnalyzer.php';
-require '../Analyzers/MinimalAreaAnalyzer.php';
-require '../Analyzers/MinimalTransfersAnalyzer.php';
-require '../InvalidArgumentException.php';
-require '../Fold.php';
-require '../MiniSprite.php';
+require __DIR__ . '/bootstrap.php';
 
 use \Tester\Assert;
 use \Tester\TestCase;

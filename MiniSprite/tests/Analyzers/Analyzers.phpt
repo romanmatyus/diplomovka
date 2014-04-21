@@ -1,30 +1,16 @@
 <?php
 
-require '../../vendor/Tester/Tester/bootstrap.php';
-require '../../Image.php';
-require '../../CssBlock.php';
-require '../../Folders/IFolder.php';
-require '../../Folders/HorizontalFolder.php';
-require '../../Folders/VerticalFolder.php';
-require '../../Analyzers/IAnalyzer.php';
-require '../../Analyzers/MinimalAreaAnalyzer.php';
-require '../../Analyzers/MinimalTransfersAnalyzer.php';
-require '../../Fold.php';
+namespace MiniSprite;
 
-use Tester\Assert;
-use MiniSprite\Image;
-use MiniSprite\CssBlock;
-use MiniSprite\Fold;
-use MiniSprite\IFolder;
-use MiniSprite\HorizontalFolder;
-use MiniSprite\VerticalFolder;
-use MiniSprite\MinimalAreaAnalyzer;
-use MiniSprite\MinimalTransfersAnalyzer;
+require __DIR__ . '/../bootstrap.php';
+
+use \Tester\Assert;
+use \Tester\TestCase;
 
 /**
  * @testCase
  */
-class AnalyzersTest extends Tester\TestCase
+class AnalyzersTest extends TestCase
 {
 	public function getTestData()
 	{

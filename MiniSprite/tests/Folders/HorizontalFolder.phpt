@@ -1,23 +1,16 @@
 <?php
 
-require '../../vendor/Tester/Tester/bootstrap.php';
-require '../../Image.php';
-require '../../CssBlock.php';
-require '../../Folders/IFolder.php';
-require '../../Folders/HorizontalFolder.php';
-require '../../Fold.php';
+namespace MiniSprite;
 
-use Tester\Assert;
-use MiniSprite\Image;
-use MiniSprite\CssBlock;
-use MiniSprite\Fold;
-use MiniSprite\IFolder;
-use MiniSprite\HorizontalFolder;
+require __DIR__ . '/../bootstrap.php';
+
+use \Tester\Assert;
+use \Tester\TestCase;
 
 /**
  * @testCase
  */
-class HorizontalFolderTest extends Tester\TestCase
+class HorizontalFolderTest extends TestCase
 {
 	public function testOne() {
 		$images = array();
